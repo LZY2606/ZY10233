@@ -1,0 +1,98 @@
+:root {
+  --bg: #f5f1e8;
+  --ink: #2d2620;
+  --muted: #7a6f62;
+  --card: #fffdf8;
+  --line: #ddd2c0;
+  --accent: #8c4a2f;
+  --good: #3e7d4f;
+  --bad: #b4452f;
+  --soft: #c9a13e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+}
+header { padding: 18px 24px 8px; }
+header h1 { margin: 0; font-size: 24px; color: var(--accent); letter-spacing: 2px; }
+.sub { color: var(--muted); margin-top: 4px; }
+main { padding: 8px 24px 40px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  box-shadow: 0 1px 2px rgba(80, 60, 40, 0.05);
+}
+.grid2 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 12px; }
+@media (max-width: 1080px) { .grid2 { grid-template-columns: 1fr; } }
+h2 { font-size: 16px; margin: 0 0 8px; color: var(--accent); }
+h3 { font-size: 14px; margin: 14px 0 6px; }
+.row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.row.wrap { flex-wrap: wrap; }
+.row.right { justify-content: flex-end; }
+.spacer { flex: 1; }
+label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+select, input[type=text], input:not([type]), textarea {
+  padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px;
+  background: #fff; color: var(--ink); font-size: 13px;
+}
+textarea { width: 100%; min-height: 64px; }
+button, .filebtn {
+  padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px;
+  background: #faf5ea; color: var(--ink); cursor: pointer; font-size: 13px;
+}
+button:hover, .filebtn:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.danger { color: var(--bad); }
+button.linkish { border: none; background: none; color: var(--accent); padding: 2px 4px; }
+.runname { font-weight: 600; }
+.hashbadge {
+  font-family: ui-monospace, monospace; font-size: 11px; color: var(--muted);
+  border: 1px dashed var(--line); padding: 2px 6px; border-radius: 6px;
+}
+table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.tag { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 12px; }
+.tag.present { background: #e4efe6; color: var(--good); }
+.tag.absent { background: #f5e2dc; color: var(--bad); }
+.tag.contam { background: #f7ecd2; color: #8a6418; margin-left: 4px; }
+.tag.core { background: #f5d8d1; color: var(--bad); }
+.tag.binding { background: #fdf3d0; color: #8a6418; }
+.tag.redundant { background: #eeeae2; color: var(--muted); }
+.tag.soft { background: #e8eef7; color: #3a5a8c; }
+.hint { color: var(--muted); font-size: 12px; margin: 4px 0 10px; }
+.pill {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px;
+  margin: 2px 6px 2px 0; border: 1px solid var(--line); background: #faf5ea;
+}
+.ok-text { color: var(--good); font-weight: 600; }
+.bad-text { color: var(--bad); font-weight: 600; }
+.window {
+  border: 1px solid var(--line); border-left: 4px solid var(--good);
+  border-radius: 8px; padding: 8px 10px; margin: 8px 0; background: #fbfaf6;
+}
+.window .wtitle { font-weight: 600; }
+.corebox {
+  border: 1px solid #e5c4bb; border-left: 4px solid var(--bad);
+  background: #fcf3f1; border-radius: 8px; padding: 8px 10px; margin: 8px 0;
+}
+.heatmaps { display: flex; flex-wrap: wrap; gap: 18px; }
+.pane h4 { margin: 0 0 6px; font-size: 13px; color: var(--accent); }
+canvas { border: 1px solid var(--line); border-radius: 4px; background: #fff; cursor: crosshair; }
+.axislabel { font-size: 11px; fill: var(--muted); }
+.legend { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.legend span.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin: 0 4px 0 12px; vertical-align: -2px; }
+.eventlog { max-height: 260px; overflow: auto; font-family: ui-monospace, monospace; font-size: 12px; }
+.eventlog div { padding: 3px 0; border-bottom: 1px dotted var(--line); }
+dialog { border: none; border-radius: 10px; padding: 0; background: var(--card); max-width: 520px; width: 92%; }
+dialog::backdrop { background: rgba(40, 30, 20, 0.4); }
+dialog article { padding: 18px; }
+dialog h3 { margin-top: 0; color: var(--accent); }
+.muted { color: var(--muted); }

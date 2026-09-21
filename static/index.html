@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>陶胎火候辨证台</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header>
+  <h1>陶胎火候辨证台</h1>
+  <div class="sub">薄片矿物 · XRD 相组成 · 孔隙率 · 热改性 — 温度 × 气氛 × 保温时间联合烧成窗辨证</div>
+</header>
+
+<main>
+  <section class="toolbar card">
+    <div class="row">
+      <label>分析单
+        <select id="runSelect"></select>
+      </label>
+      <label>解释分支
+        <select id="branchSelect"></select>
+      </label>
+      <label>规则版本
+        <select id="packSelect"></select>
+      </label>
+      <button id="newBranchBtn" type="button">保留人工解释分支…</button>
+      <span class="spacer"></span>
+      <button id="exportBtn" type="button">导出运行记录</button>
+      <label class="filebtn">导入复核<input id="importFile" type="file" accept="application/json" hidden></label>
+      <button id="clearBtn" type="button" class="danger">清空并重导 fixture</button>
+    </div>
+    <div class="row">
+      <button id="newRunBtn" type="button">新建分析单…</button>
+      <span id="runName" class="runname"></span>
+      <span id="hashBadge" class="hashbadge"></span>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>观测证据</h2>
+      <p class="hint">确认一项观测即加入硬证据；对受污染特征可降低权重（0.3）转为软证据，软证据只着色不决定可行性。</p>
+      <table id="obsTable">
+        <thead><tr><th>特征</th><th>判定</th><th>权重</th><th>污染</th><th>排除区域</th><th>敏感性</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="row wrap">
+        <select id="addFeature"></select>
+        <select id="addOp"><option value="present">出现 present</option><option value="absent">消失 absent</option></select>
+        <input id="addId" placeholder="观测编号" maxlength="40">
+        <button id="addObsBtn" type="button">确认观测</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>辨证结论</h2>
+      <div id="verdict"></div>
+      <h3>可行烧成窗（联合窗，互不合并）</h3>
+      <div id="windows"></div>
+      <h3>最小冲突观测集</h3>
+      <div id="cores"></div>
+      <h3>软证据敏感性</h3>
+      <div id="softInfo"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>联合参数区域</h2>
+    <p class="hint">每张热力图是一个气氛面；纵轴为保温时间，横轴为烧成温度（℃）。绿=硬可行窗，黄=被某证据排除，红色描边=当前勾选证据单独排除的区域；灰阶为软证据满足比例（不制造可行区）。点击证据行“叠加排除区”查看其多维排除范围。</p>
+    <div id="heatmaps" class="heatmaps"></div>
+  </section>
+
+  <section class="card">
+    <h2>操作流水（可重放）</h2>
+    <div id="eventLog"></div>
+  </section>
+</main>
+
+<dialog id="modal">
+  <article>
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="row right">
+      <button id="modalCancel" type="button">取消</button>
+      <button id="modalOk" type="button" class="primary">确定</button>
+    </div>
+  </article>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

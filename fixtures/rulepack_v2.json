@@ -1,0 +1,83 @@
+{
+  "pack_id": "taotai-v2",
+  "version": "v2",
+  "label": "陶胎火候规则包 v2（修订阈值）",
+  "description": "依据修订热分析曲线调整阈值：方解石分解上限降至 580℃；莫来石在长保温下 950℃ 起；短保温玻璃化仍需 1050℃。",
+  "grid": {"temp_min": 400, "temp_max": 1200, "temp_step": 10,
+           "atmospheres": [{"id": "oxid", "label": "氧化"}, {"id": "reduct", "label": "还原"}],
+           "hold_times": [{"id": "short", "label": "短保温 <30min", "hours_max": 0.5},
+                          {"id": "medium", "label": "中等保温 0.5–4h", "hours_min": 0.5, "hours_max": 4.0},
+                          {"id": "long", "label": "长保温 >4h", "hours_min": 4.0}]},
+  "features": [
+    {
+      "key": "calcite",
+      "label": "方解石（XRD 峰）",
+      "material": "calcareous",
+      "contamination_note": "埋藏次生碳酸盐/再沉积碳酸盐可在样品中重新引入方解石峰，属受污染特征。",
+      "clauses": [
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["short", "medium", "long"],
+         "temp_min": 400, "temp_max": 580, "max_inclusive": true}
+      ]
+    },
+    {
+      "key": "kaolinite",
+      "label": "高岭石（薄片/XRD）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["short"],
+         "temp_min": 400, "temp_max": 450, "max_inclusive": true},
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["medium", "long"],
+         "temp_min": 400, "temp_max": 500, "max_inclusive": true}
+      ]
+    },
+    {
+      "key": "hematite_red",
+      "label": "赤铁矿致红（薄片）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["oxid"], "time": ["short", "medium", "long"],
+         "temp_min": 700, "temp_max": 1200, "max_inclusive": true}
+      ]
+    },
+    {
+      "key": "mullite",
+      "label": "莫来石（XRD 新相）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["medium"],
+         "temp_min": 1000, "temp_max": 1200, "max_inclusive": false},
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["long"],
+         "temp_min": 950, "temp_max": 1200, "max_inclusive": false}
+      ]
+    },
+    {
+      "key": "vitrification",
+      "label": "显著玻璃化（孔隙率下降）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["short"],
+         "temp_min": 1050, "temp_max": 1200, "max_inclusive": true},
+        {"op": "present", "atmo": ["oxid", "reduct"], "time": ["medium", "long"],
+         "temp_min": 950, "temp_max": 1200, "max_inclusive": true}
+      ]
+    },
+    {
+      "key": "charcoal_residue",
+      "label": "炭质残留（薄片/热改性）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["reduct"], "time": ["short", "medium"],
+         "temp_min": 400, "temp_max": 700, "max_inclusive": true}
+      ]
+    },
+    {
+      "key": "magnetite",
+      "label": "磁铁矿（XRD/磁性）",
+      "material": "any",
+      "clauses": [
+        {"op": "present", "atmo": ["reduct"], "time": ["short", "medium", "long"],
+         "temp_min": 800, "temp_max": 1200, "max_inclusive": true}
+      ]
+    }
+  ]
+}

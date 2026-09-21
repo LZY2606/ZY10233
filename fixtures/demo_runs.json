@@ -1,0 +1,34 @@
+{
+  "runs": [
+    {
+      "run_id": "demo-conflict",
+      "name": "演示一：受污染方解石 × 莫来石冲突（钙质泥料）",
+      "material": "calcareous",
+      "pack_version": "v1",
+      "branch": "main",
+      "note": "同一薄片出现疑似方解石峰与莫来石新相，二者温度区间互斥；方解石峰可能来自埋藏次生碳酸盐。",
+      "observations": [
+        {"id": "cal", "feature_key": "calcite", "op": "present", "weight": 1.0,
+         "contaminated": true, "note": "XRD 见方解石峰；采样处有碳酸盐脉，疑似埋藏污染。"},
+        {"id": "mul", "feature_key": "mullite", "op": "present", "weight": 1.0,
+         "contaminated": false, "note": "XRD 莫来石衍射峰明确，薄片见新生针状晶。"},
+        {"id": "kao", "feature_key": "kaolinite", "op": "absent", "weight": 1.0,
+         "contaminated": false, "note": "高岭石残余结构消失，偏高岭土化以上。"},
+        {"id": "hem", "feature_key": "hematite_red", "op": "absent", "weight": 1.0,
+         "contaminated": false, "note": "断面呈灰黑而非红陶色调，赤铁矿致红不成立。"}
+      ]
+    },
+    {
+      "run_id": "demo-twowindows",
+      "name": "演示二：氧化/还原双可行窗（普通泥料）",
+      "material": "common",
+      "pack_version": "v1",
+      "branch": "main",
+      "note": "仅确认无赤铁矿致红：中温短保温下氧化与还原各自保留独立窗口，不可合并成单轴结论。",
+      "observations": [
+        {"id": "hem2", "feature_key": "hematite_red", "op": "absent", "weight": 1.0,
+         "contaminated": false, "note": "薄片未见赤铁矿晶粒集合，陶色不红。"}
+      ]
+    }
+  ]
+}
