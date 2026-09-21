@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>陶胎火候辨证台</title>
+<style>
+  :root {
+    --bg:#14181d; --panel:#1d242c; --line:#303a45; --fg:#e6ebef; --muted:#97a3ad;
+    --accent:#d9a441; --good:#4caf7d; --bad:#e06a5a; --soft:#c9a24b; --naive:#7e6a3a;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.55 "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; }
+  header { padding:18px 24px 10px; border-bottom:1px solid var(--line); }
+  h1 { margin:0; font-size:22px; letter-spacing:2px; }
+  .sub { color:var(--muted); font-size:13px; margin-top:4px; }
+  .wrap { display:grid; grid-template-columns: 380px 1fr; gap:16px; padding:16px 24px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+  .panel h2 { font-size:15px; margin:0 0 10px; color:var(--accent); letter-spacing:1px; }
+  select, button, input[type=text] { background:#10151a; color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 9px; font-size:13px; }
+  button { cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:6px 0; }
+  .muted { color:var(--muted); }
+  .ev { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin:8px 0; }
+  .ev .top { display:flex; justify-content:space-between; gap:8px; align-items:baseline; }
+  .tag { font-size:11px; padding:1px 7px; border-radius:10px; border:1px solid var(--line); color:var(--muted); }
+  .tag.contam { color:var(--soft); border-color:var(--soft); }
+  .tag.hardb { color:var(--good); border-color:var(--good); }
+  .tag.softb { color:var(--soft); border-color:var(--soft); }
+  .tag.offb { color:var(--bad); border-color:var(--bad); }
+  .seg button { padding:3px 8px; font-size:12px; }
+  .seg button.on { background:var(--accent); color:#1a1408; border-color:var(--accent); font-weight:600; }
+  .region { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:#bcd; margin-top:4px; white-space:pre-line; }
+  .conflict { border-left:3px solid var(--bad); padding-left:10px; margin:8px 0; }
+  .okline { color:var(--good); } .badline { color:var(--bad); } .softline { color:var(--soft); }
+  canvas { background:#0f1317; border:1px solid var(--line); border-radius:8px; image-rendering:pixelated; }
+  .legend span { display:inline-block; margin-right:14px; font-size:12px; }
+  .sw { display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
+  table { border-collapse:collapse; width:100%; font-size:12.5px; }
+  td,th { border-bottom:1px solid var(--line); padding:5px 7px; text-align:left; }
+  th { color:var(--muted); font-weight:500; }
+  .mono { font-family:ui-monospace,Menlo,monospace; }
+  details { margin-top:6px; } summary { cursor:pointer; color:var(--muted); }
+  #tooltip { position:fixed; pointer-events:none; background:#0d1115ee; border:1px solid var(--accent); border-radius:6px; padding:6px 9px; font-size:12px; display:none; z-index:9; max-width:320px; }
+  .warn { background:#2a2118; border:1px solid var(--soft); border-radius:8px; padding:8px 11px; color:#e8d3a0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>陶胎火候辨证台</h1>
+  <div class="sub">薄片矿物 · XRD 相组成 · 孔隙率 · 热改性 —— 温度 × 气氛 × 保温时间联合窗辨证（区间证据，多窗并存）</div>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="panel">
+      <h2>样品与规则版本</h2>
+      <div class="row">
+        <label class="muted">样品</label>
+        <select id="sampleSel"></select>
+      </div>
+      <div class="row">
+        <label class="muted">规则版本</label>
+        <select id="packSel"></select>
+      </div>
+      <div id="packNote" class="muted" style="font-size:12px"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="solveBtn">重新辨证</button>
+        <button id="saveRunBtn">保存运行记录</button>
+        <button id="branchBtn">存为人工解释分支</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>观测证据（可确认 / 降权 / 停用）</h2>
+      <div id="evidenceList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>数据与复核</h2>
+      <div class="row">
+        <button id="exportBtn">导出运行记录</button>
+        <button id="resetBtn">清空并重置 fixture</button>
+      </div>
+      <div class="row">
+        <input type="file" id="importFile" accept="application/json" />
+        <button id="importBtn">导入复核</button>
+      </div>
+      <div id="runs"></div>
+      <div id="branches"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>可行参数区域（联合窗）</h2>
+      <div id="statusLine"></div>
+      <div class="row" style="margin-top:10px">
+        <canvas id="map" width="760" height="300"></canvas>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--good)"></i>联合可行</span>
+        <span><i class="sw" style="background:var(--soft)"></i>软张力（与降权证据冲突）</span>
+        <span><i class="sw" style="background:#3a434d"></i>被证据排除</span>
+        <span><i class="sw" style="background:var(--naive)"></i>朴素单轴交集（虚假区）</span>
+      </div>
+      <div class="muted" style="font-size:12px;margin-top:6px">
+        纵轴三行：上=氧化 O，中=还原 R，下=中性 N；横轴温度 ℃（每格 20℃）；悬停查看各气氛下的保温区间与被排除原因。
+      </div>
+      <div id="feasibleText" class="region" style="margin-top:8px"></div>
+    </div>
+
+    <div class="panel">
+      <h2>最小冲突核心与敏感性</h2>
+      <div id="conflictBox"></div>
+      <div id="sensBox" style="margin-top:10px"></div>
+      <div id="naiveBox" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
